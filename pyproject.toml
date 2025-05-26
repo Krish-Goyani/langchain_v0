@@ -1,96 +1,169 @@
-[project]
-authors = []
-license = { text = "MIT" }
-requires-python = ">=3.9"
-dependencies = []
-name = "langchain-monorepo"
-version = "0.0.1"
-description = "LangChain mono-repo"
-readme = "README.md"
-
-[project.urls]
-repository = "https://www.github.com/langchain-ai/langchain"
-
-[dependency-groups]
-lint = ["ruff<1.0.0,>=0.5.0"]
-dev = [
-    "langchain-core",
-    "langchain-text-splitters",
-    "langchain-community",
-    "langchain",
-    "langchain-openai",
-    "ipykernel<7.0.0,>=6.29.2",
-]
-codespell = ["codespell<3.0.0,>=2.2.0"]
-typing = []
-test = [
-    "langchain-experimental @ git+https://github.com/langchain-ai/langchain-experimental.git#subdirectory=libs/experimental",
-    "langchain-anthropic",
-    "langchain-aws @ git+https://github.com/langchain-ai/langchain-aws.git#subdirectory=libs/aws",
-    "langchain-chroma",
-    "langchain-fireworks",
-    "langchain-google-vertexai @ git+https://github.com/langchain-ai/langchain-google.git#subdirectory=libs/vertexai",
-    "langchain-google-genai @ git+https://github.com/langchain-ai/langchain-google.git#subdirectory=libs/genai",
-    "langchain-groq",
-    "langchain-mistralai",
-    "langchain-together @ git+https://github.com/langchain-ai/langchain-together.git#subdirectory=libs/together",
-    "langchain-unstructured @ git+https://github.com/langchain-ai/langchain-unstructured.git#subdirectory=libs/unstructured",
-    "langgraph",
-    "jupyter<2.0.0,>=1.1.1",
-    "click<9.0.0,>=8.1.7",
-    "aiofiles<25.0.0,>=24.1.0",
-    "faiss-cpu<2.0.0,>=1.7.4",
-    "grandalf<1.0,>=0.8",
-    "lark<2.0.0,>=1.1.9",
-    "pandas<3,>=2",
-    "rank-bm25<1.0.0,>=0.2.2",
-    "tabulate<1.0.0,>=0.9.0",
-    "unstructured[md]<1.0.0,>=0.16.11; python_version < \"3.13\"",
-    "wikipedia<2.0.0,>=1.4.0",
-    "pypdf<6.0.0,>=5.0.0",
-    "vcrpy<7.0.0,>=6.0.1",
-]
-
-
-[tool.uv.sources]
-langchain-core = { path = "./libs/core", editable = true }
-langchain-text-splitters = { path = "./libs/text-splitters", editable = true }
-langchain-tests = { path = "./libs/standard-tests", editable = true }
-langchain = { path = "./libs/langchain", editable = true }
-langchain-openai = { path = "./libs/partners/openai", editable = true }
-langchain-anthropic = { path = "./libs/partners/anthropic", editable = true }
-langchain-chroma = { path = "./libs/partners/chroma", editable = true }
-langchain-fireworks = { path = "./libs/partners/fireworks", editable = true }
-langchain-groq = { path = "./libs/partners/groq", editable = true }
-langchain-mistralai = { path = "./libs/partners/mistralai", editable = true }
-
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[project]
+authors = []
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [
+    "langchain-core<1.0.0,>=0.3.58",
+    "langchain-text-splitters<1.0.0,>=0.3.8",
+    "langsmith<0.4,>=0.1.17",
+    "pydantic<3.0.0,>=2.7.4",
+    "SQLAlchemy<3,>=1.4",
+    "requests<3,>=2",
+    "PyYAML>=5.3",
+    "async-timeout<5.0.0,>=4.0.0; python_version < \"3.11\"",
+]
+name = "langchain"
+version = "0.3.25"
+description = "Building applications with LLMs through composability"
+readme = "README.md"
 
-[tool.codespell]
-skip = '.git,*.pdf,*.svg,*.pdf,*.yaml,*.ipynb,poetry.lock,*.min.js,*.css,package-lock.json,example_data,_dist,examples,templates,*.trig'
-# Ignore latin etc
-ignore-regex = '.*(Stati Uniti|Tense=Pres).*'
-# whats is a typo but used frequently in queries so kept as is
-# aapply - async apply
-# unsecure - typo but part of API, decided to not bother for now
-ignore-words-list = 'momento,collison,ned,foor,reworkd,parth,whats,aapply,mysogyny,unsecure,damon,crate,aadd,symbl,precesses,accademia,nin,cann'
+[project.optional-dependencies]
+community = ["langchain-community"]
+anthropic = ["langchain-anthropic"]
+openai = ["langchain-openai"]
+azure-ai = ["langchain-azure-ai"]
+cohere = ["langchain-cohere"]
+google-vertexai = ["langchain-google-vertexai"]
+google-genai = ["langchain-google-genai"]
+fireworks = ["langchain-fireworks"]
+ollama = ["langchain-ollama"]
+together = ["langchain-together"]
+mistralai = ["langchain-mistralai"]
+huggingface = ["langchain-huggingface"]
+groq = ["langchain-groq"]
+aws = ["langchain-aws"]
+deepseek = ["langchain-deepseek"]
+xai = ["langchain-xai"]
+perplexity = ["langchain-perplexity"]
+
+[project.urls]
+"Source Code" = "https://github.com/langchain-ai/langchain/tree/master/libs/langchain"
+"Release Notes" = "https://github.com/langchain-ai/langchain/releases?q=tag%3A%22langchain%3D%3D0%22&expanded=true"
+repository = "https://github.com/langchain-ai/langchain"
+
+[dependency-groups]
+test = [
+    "pytest<9,>=8",
+    "pytest-cov<5.0.0,>=4.0.0",
+    "pytest-dotenv<1.0.0,>=0.5.2",
+    "duckdb-engine<1.0.0,>=0.9.2",
+    "pytest-watcher<1.0.0,>=0.2.6",
+    "freezegun<2.0.0,>=1.2.2",
+    "responses<1.0.0,>=0.22.0",
+    "pytest-asyncio<1.0.0,>=0.23.2",
+    "lark<2.0.0,>=1.1.5",
+    "pandas<3.0.0,>=2.0.0",
+    "pytest-mock<4.0.0,>=3.10.0",
+    "pytest-socket<1.0.0,>=0.6.0",
+    "syrupy<5.0.0,>=4.0.2",
+    "requests-mock<2.0.0,>=1.11.0",
+    "pytest-xdist<4.0.0,>=3.6.1",
+    "blockbuster<1.6,>=1.5.18",
+    "cffi<1.17.1; python_version < \"3.10\"",
+    "cffi; python_version >= \"3.10\"",
+    "langchain-tests",
+    "langchain-core",
+    "langchain-text-splitters",
+    "langchain-openai",
+    "toml>=0.10.2",
+    "packaging>=24.2",
+    "numpy>=1.26.4; python_version<'3.13'",
+    "numpy>=2.1.0; python_version>='3.13'",
+]
+codespell = ["codespell<3.0.0,>=2.2.0"]
+test_integration = [
+    "pytest-vcr<2.0.0,>=1.0.2",
+    "urllib3<2; python_version < \"3.10\"",
+    "wrapt<2.0.0,>=1.15.0",
+    "python-dotenv<2.0.0,>=1.0.0",
+    "cassio<1.0.0,>=0.1.0",
+    "langchainhub<1.0.0,>=0.1.16",
+    "langchain-core",
+    "langchain-text-splitters",
+]
+lint = [
+    "ruff<1.0.0,>=0.9.2",
+    "cffi<1.17.1; python_version < \"3.10\"",
+    "cffi; python_version >= \"3.10\"",
+]
+typing = [
+    "mypy<1.16,>=1.15",
+    "types-pyyaml<7.0.0.0,>=6.0.12.2",
+    "types-requests<3.0.0.0,>=2.28.11.5",
+    "types-toml<1.0.0.0,>=0.10.8.1",
+    "types-redis<5.0.0.0,>=4.3.21.6",
+    "types-pytz<2024.0.0.0,>=2023.3.0.0",
+    "types-chardet<6.0.0.0,>=5.0.4.6",
+    "mypy-protobuf<4.0.0,>=3.0.0",
+    "langchain-core",
+    "langchain-text-splitters",
+    "numpy>=1.26.4; python_version < '3.13'",
+    "numpy>=2.1.0; python_version >= '3.13'",
+]
+dev = [
+    "jupyter<2.0.0,>=1.0.0",
+    "playwright<2.0.0,>=1.28.0",
+    "setuptools<68.0.0,>=67.6.1",
+    "langchain-core",
+    "langchain-text-splitters",
+]
+
+
+[tool.uv.sources]
+langchain-core = { path = "../core", editable = true }
+langchain-tests = { path = "../standard-tests", editable = true }
+langchain-text-splitters = { path = "../text-splitters", editable = true }
+langchain-openai = { path = "../partners/openai", editable = true }
 
 [tool.ruff]
-extend-include = ["*.ipynb"]
+target-version = "py39"
+exclude = ["tests/integration_tests/examples/non-utf8-encoding.py"]
+
+[tool.mypy]
+strict = "True"
+strict_bytes = "True"
+ignore_missing_imports = "True"
+enable_error_code = "deprecated"
+report_deprecated_as_note = "True"
+
+# TODO: activate for 'strict' checking
+disallow_untyped_calls = "False"
+disallow_any_generics = "False"
+disallow_untyped_decorators = "False"
+warn_return_any = "False"
+strict_equality = "False"
+
+[tool.codespell]
+skip = ".git,*.pdf,*.svg,*.pdf,*.yaml,*.ipynb,poetry.lock,*.min.js,*.css,package-lock.json,example_data,_dist,examples,*.trig"
+ignore-regex = ".*(Stati Uniti|Tense=Pres).*"
+ignore-words-list = "momento,collison,ned,foor,reworkd,parth,whats,aapply,mysogyny,unsecure,damon,crate,aadd,symbl,precesses,accademia,nin"
 
 [tool.ruff.lint]
-select = ["D"]
+select = ["E", "F", "I", "PGH003", "T201", "D", "UP"]
+ignore = ["UP007", ]
 pydocstyle = { convention = "google" }
 
 [tool.ruff.lint.per-file-ignores]
-"**/{cookbook,docs}/*" = [
-    "E402", # allow imports to appear anywhere in docs
-    "F401", # allow "imported but unused" example code
-    "F811", # allow re-importing the same module, so that cells can stay independent
-    "F841", # allow assignments to variables that are never read -- it's example code
+"tests/*" = ["D"]
+"!langchain/indexes/vectorstore.py" = ["D"]
 
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --strict-config --durations=5 --snapshot-warn-unused -vv"
+markers = [
+    "requires: mark tests as requiring a specific library",
+    "scheduled: mark tests to run in scheduled testing",
+    "compile: mark placeholder test used to compile integration tests without running them",
 ]
-"!libs/langchain/langchain/model_laboratory.py" = ["D"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::langchain_core._api.beta_decorator.LangChainBetaWarning",
+    "ignore::langchain_core._api.deprecation.LangChainDeprecationWarning:tests",
+    "ignore::langchain_core._api.deprecation.LangChainPendingDeprecationWarning:tests",
+]
